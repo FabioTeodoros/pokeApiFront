@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello vue</title>
+    <script src="./assets/js/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+<!-- <h1>{{listas[0].idioma}}</h1> -->
+<!-- <h1 v-text="listas[0].id + 1"></h1> -->
+<h1>{{verifica ? listas[0].nome : mensagem}}</h1>
+    </div>
+
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                mensagem: 'Olá, Vue.js! Meu olá, mundo!',
+                listas: [
+                    {
+                    id:1,
+                    nome: 'Fabio',
+                    idioma: 'pt-br'
+                    },
+                    {
+                    id:2,
+                    nome: 'jao',
+                    idioma: 'US'
+                    }
+                ],
+                verifica: false
+            }
+            
+
+        });
+    </script>
+</body>
+</html>
