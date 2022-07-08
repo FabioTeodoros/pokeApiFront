@@ -1,6 +1,6 @@
 import Vue from 'vue'
-import App from './App.vue'
-import vuetify from './plugins/vuetify'
+import App from './Pokedex.vue'
+import vuetify from '/src/plugins/vuetify'
 
 Vue.config.productionTip = false
 
