@@ -9,13 +9,8 @@
           </v-container>
         </v-row>
 
+        <PokemonCreate v-on:clickOnCreateButton="show_dialog_crud"/>
         <v-dialog v-model="show_dialog_crud" persistent max-width="600px">
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn class="pokemon-text-logo button-margin" v-bind="attrs" v-on="on">
-              <v-icon left> mdi-pencil </v-icon>
-              <div>EDIT</div>
-            </v-btn>
-          </template>
           <v-card>
             <v-card-title>
               <span class="text-h5">Pokémon Personal</span>
@@ -27,43 +22,96 @@
                     <v-text-field label="ID" v-model="inputId"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field label="Name" v-model="inputName"></v-text-field>
+                    <v-text-field
+                      label="Name"
+                      v-model="inputName"
+                    ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field label="EXP" v-model="inputExp"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field label="Height" v-model="inputHeight"></v-text-field>
+                    <v-text-field
+                      label="Height"
+                      v-model="inputHeight"
+                    ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field label="Weight" v-model="inputWeight"></v-text-field>
+                    <v-text-field
+                      label="Weight"
+                      v-model="inputWeight"
+                    ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field label="Ability 1" v-model="inputAbility1"></v-text-field>
+                    <v-text-field
+                      label="Ability 1"
+                      v-model="inputAbility1"
+                    ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field label="Ability 2" v-model="inputAbility2"></v-text-field>
+                    <v-text-field
+                      label="Ability 2"
+                      v-model="inputAbility2"
+                    ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-select :items="['', 'fire', 'water', 'grass', 'normal']" label="Type 1" v-model="inputType1">
+                    <v-select
+                      :items="['', 'fire', 'water', 'grass', 'normal']"
+                      label="Type 1"
+                      v-model="inputType1"
+                    >
                     </v-select>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-select :items="['', 'fire', 'water', 'grass', 'normal']" label="Type 2" v-model="inputType2">
+                    <v-select
+                      :items="['', 'fire', 'water', 'grass', 'normal']"
+                      label="Type 2"
+                      v-model="inputType2"
+                    >
                     </v-select>
                   </v-col>
                 </v-row>
               </v-container>
-              <small>*** The id field is unique for deleting and changing Pokémons</small>
+              <small
+                >*** The id field is unique for deleting and changing
+                Pokémons</small
+              >
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn :key="idReload" color="green"
-                @click="insertPersonal(inputName, inputExp, inputHeight, inputWeight, inputAbility1, inputAbility2, inputType1, inputType2)">
+              <v-btn
+                color="green"
+                @click="
+                  insertPersonal(
+                    inputName,
+                    inputExp,
+                    inputHeight,
+                    inputWeight,
+                    inputAbility1,
+                    inputAbility2,
+                    inputType1,
+                    inputType2
+                  )
+                "
+              >
                 <div>Insert</div>
               </v-btn>
-              <v-btn color="blue"
-                @click="updatePersonal(inputId, inputName, inputExp, inputHeight, inputWeight, inputAbility1, inputAbility2, inputType1, inputType2)">
+              <v-btn
+                color="blue"
+                @click="
+                  updatePersonal(
+                    inputId,
+                    inputName,
+                    inputExp,
+                    inputHeight,
+                    inputWeight,
+                    inputAbility1,
+                    inputAbility2,
+                    inputType1,
+                    inputType2
+                  )
+                "
+              >
                 <div>Update</div>
               </v-btn>
               <v-btn color="red" @click="deletePersonal(inputId)">
@@ -76,14 +124,28 @@
           </v-card>
         </v-dialog>
 
-        <v-text-field v-model="search" label="Search about a pokemon using name or number" placeholder="Search Pokémons"
-          solo></v-text-field>
+        <v-text-field
+          v-model="search"
+          label="Search about a pokemon using name or number"
+          placeholder="Search Pokémons"
+          solo
+        ></v-text-field>
         <v-row>
-          <v-col class="coluns-pokemons" v-for="pokemon in filtered_pokemons" :key="pokemon.name">
-            <v-card class="card-pokemon-size" v-on:click="show_pokemon(pokemon)">
+          <v-col
+            class="coluns-pokemons"
+            v-for="pokemon in filtered_pokemons"
+            :key="pokemon.name"
+          >
+            <v-card
+              class="card-pokemon-size"
+              v-on:click="show_pokemon(pokemon)"
+            >
               <v-container>
                 <v-row class="mx-0 d-flex justify-center">
-                  <img :src=pokemon.url_image class="pokemon-image-size-card" />
+                  <img
+                    :src="pokemon.url_image"
+                    class="pokemon-image-size-card"
+                  />
                 </v-row>
                 <h2 class="text-center">{{ get_name(pokemon) }}</h2>
               </v-container>
@@ -97,27 +159,39 @@
         <v-col class="pokemon-image-pokedex">
           <v-card v-if="selected_pokemon" class="pokemon-card">
             <v-container>
-              <img :src=selected_pokemon.url_image class="pokemon-image" />
+              <img :src="selected_pokemon.url_image" class="pokemon-image" />
               <v-row>
                 <v-col>
                   <h1>{{ selected_pokemon.name }}</h1>
                   <v-divider></v-divider>
                   <span>Id {{ selected_pokemon.id }}</span>
                   <v-divider></v-divider>
-                  <span>Base Experience/Experiência {{ selected_pokemon.base_experience }} XP</span>
+                  <span
+                    >Base Experience/Experiência
+                    {{ selected_pokemon.base_experience }} XP</span
+                  >
                   <v-divider></v-divider>
                   <span>Height/Altura {{ selected_pokemon.height }} m</span>
                   <v-divider>class="my-4"</v-divider>
                   <span>Weight/Peso {{ selected_pokemon.weight }} kg</span>
                   <v-divider></v-divider>
                   <h3>Pokémon Types/Tipo</h3>
-                  <button class="button-ability" :type-color="type.type.name" v-for="type in selected_pokemon.types">
+                  <button
+                    class="button-ability"
+                    :type-color="type.type.name"
+                    v-for="type in selected_pokemon.types"
+                    :key="type.id"
+                  >
                     {{ type.type.name }}
                   </button>
                   <v-divider>class="my-4"</v-divider>
                   <h3>Pokémon Abilities/Habilidades</h3>
-                  <v-chip outlined v-for="ability in selected_pokemon.abilities" :key="ability.slot"
-                    class="outlined-style black">
+                  <v-chip
+                    outlined
+                    v-for="ability in selected_pokemon.abilities"
+                    :key="ability.slot"
+                    class="outlined-style black"
+                  >
                     {{ ability.ability.name }}
                   </v-chip>
                 </v-col>
@@ -131,12 +205,18 @@
 </template>
 
 <script>
-import Vue from 'vue';
-import axios from 'axios';
+import Vue from "vue";
+import axios from "axios";
+import pokemonGateway from "./gateways/pokemon.gateway";
+import PokemonCard from "./components/PokemonCard.vue";
+import PokemonCreate from "./components/PokemonCreate.vue";
 export default {
-  name: 'App',
+  name: "App",
 
-  components: {},
+  components: {
+    PokemonCard,
+    PokemonCreate,
+  },
 
   data: () => {
     return {
@@ -154,25 +234,34 @@ export default {
       inputAbility2: null,
       inputHeight: null,
       inputWeight: null,
-      idReload: 0,
     };
   },
 
   mounted() {
-    axios
-      .get("http://127.0.0.1:3000/pokemon/all")
+    pokemonGateway
+      .getPokemons()
       .then((response) => {
         this.pokemons = response.data.results;
-        this.idReload++;
-        console.info(this.idReload);
+        console.log("Get all Pokémons Succes");
+      })
+      .catch((error) => {
+        console.log(error);
       });
   },
+
+  created() {
+    this.$on("clickOnCreateButton", () => {
+      this.show_dialog_crud = true;
+      console.log("teste");
+    });
+  },
+
   methods: {
     get_id(pokemon) {
-      return String(pokemon.id)
+      return String(pokemon.id);
     },
     get_model(pokemon) {
-      return String(pokemon.model)
+      return String(pokemon.model);
     },
     get_name(pokemon) {
       return pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1);
@@ -180,115 +269,95 @@ export default {
     show_pokemon(pokemon) {
       const id = this.get_id(pokemon);
       const model = pokemon.model;
-      axios
-        .get(`http://127.0.0.1:3000/pokemon/${model}/${id}`)
+      pokemonGateway
+        .getPokemon(model, id)
         .then((response) => {
           this.selected_pokemon = response.data;
           this.selected_pokemon.url_image = pokemon.url_image;
           this.show_dialog = !this.show_dialog;
+          console.log("Show Pokémons Successfully");
+        })
+        .catch((error) => {
+          console.log(error);
         });
     },
-    insertPersonal(inputName, inputExp, inputHeight, inputWeight, inputAbility1, inputAbility2, inputType1, inputType2) {
-
-      const createNameAbility1 = {
-        name: inputAbility1
-      }
-      const createNameAbility2 = {
-        name: inputAbility2
-      }
-      const createAbility1 = {
-        ability: createNameAbility1
-      }
-      const createAbility2 = {
-        ability: createNameAbility2
-      }
-      const createNameType1 = {
-        name: inputType1
-      }
-      const createNameType2 = {
-        name: inputType2
-      }
-      const createType1 = {
-        type: createNameType1
-      }
-      const createType2 = {
-        type: createNameType2
-      }
-
+    insertPersonal(
+      inputName,
+      inputExp,
+      inputHeight,
+      inputWeight,
+      inputAbility1,
+      inputAbility2,
+      inputType1,
+      inputType2
+    ) {
       const data = {
         name: inputName,
         base_experience: inputExp,
         height: inputHeight,
         weight: inputWeight,
-        abilities: Array.from([createAbility1, createAbility2]),
-        types: Array.from([createType1, createType2])
-      }
-      const dataJson = JSON.stringify(data);
-      const req = fetch("http://127.0.0.1:3000/insert", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: dataJson
-      });
+        abilities: [
+          { ability: { name: inputAbility1 } },
+          { ability: { name: inputAbility2 } },
+        ],
+        types: [{ type: { name: inputType1 }, type: { name: inputType2 } }],
+      };
+      pokemonGateway
+        .insertPokemon(data)
+        .then(() => {
+          console.log("Create Pokémon Successfully");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
+
     deletePersonal(inputId) {
-      const data = {
-        id: inputId,
-      }
-      const dataJson = JSON.stringify(data);
-      const req = fetch(`http://127.0.0.1:3000/delete/${inputId}`, {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: dataJson
-      });
+      pokemonGateway.deletePokemon(inputId);
     },
-    updatePersonal(inputId, inputName, inputExp, inputHeight, inputWeight, inputAbility1, inputAbility2, inputType1, inputType2) {
 
-      const createNameAbility1 = {
-        name: inputAbility1
-      }
-      const createNameAbility2 = {
-        name: inputAbility2
-      }
-      const createAbility1 = {
-        ability: createNameAbility1
-      }
-      const createAbility2 = {
-        ability: createNameAbility2
-      }
-      const createNameType1 = {
-        name: inputType1
-      }
-      const createNameType2 = {
-        name: inputType2
-      }
-      const createType1 = {
-        type: createNameType1
-      }
-      const createType2 = {
-        type: createNameType2
-      }
-
+    updatePersonal(
+      inputId,
+      inputName,
+      inputExp,
+      inputHeight,
+      inputWeight,
+      inputAbility1,
+      inputAbility2,
+      inputType1,
+      inputType2
+    ) {
       const data = {
         name: inputName,
         base_experience: inputExp,
         height: inputHeight,
         weight: inputWeight,
-        abilities: Array.from([createAbility1, createAbility2]),
-        types: Array.from([createType1, createType2])
-      }
-      const dataJson = JSON.stringify(data);
-      const req = fetch(`http://127.0.0.1:3000/update/${inputId}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: dataJson
-      });
+        abilities: [
+          { ability: { name: inputAbility1 } },
+          { ability: { name: inputAbility2 } },
+        ],
+        types: [{ type: { name: inputType1 }, type: { name: inputType2 } }],
+      };
+      pokemonGateway
+        .updatePokemon(inputId, data)
+        .then(() => {
+          console.log("Update Pokémon Successfully");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
+    show_dialog() {
+      console.log("funcao show dialog")
+    }
   },
 
   computed: {
     filtered_pokemons() {
       return this.pokemons.filter((items) => {
-        return items.name.includes(this.search) || items.id.includes(this.search);
+        return (
+          items.name.includes(this.search) || items.id.includes(this.search)
+        );
       });
     },
   },
@@ -297,9 +366,12 @@ export default {
 
 <style>
 #app {
-  background: linear-gradient(to bottom right,
+  background: linear-gradient(
+      to bottom right,
       rgba(245, 54, 7, 0.829),
-      rgba(240, 189, 150, 0.808)) no-repeat center center fixed !important;
+      rgba(240, 189, 150, 0.808)
+    )
+    no-repeat center center fixed !important;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -324,7 +396,7 @@ export default {
 }
 
 .pokemon-image-pokedex {
-  background-image: url('./assets/fundo.png');
+  background-image: url("./assets/fundo.png");
   background-size: 382px;
 }
 
@@ -356,7 +428,6 @@ export default {
 
 .button-crud {
   margin-left: -150px;
-
 }
 
 .outlined-style {
@@ -373,10 +444,6 @@ export default {
   width: 34%;
 }
 
-.button-margin {
-  margin-bottom: 5px;
-}
-
 .pokemon-image-size-card {
   width: 70%;
   margin-top: 10px;
@@ -391,7 +458,6 @@ export default {
   width: 23%;
   filter: drop-shadow(0 0.5em 0.5rem rgba(0, 0, 0, 0.5));
 }
-
 
 button[type-color="fire"] {
   background-color: rgb(255, 0, 0);
