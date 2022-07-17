@@ -6,8 +6,8 @@
 
 <script>
 export default {
-    name: 'PokemonImgLogo'
-}
+  name: "PokemonImgLogo",
+};
 </script>
 
 <style>

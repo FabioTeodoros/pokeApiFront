@@ -6,13 +6,6 @@
     <v-card-text>
       <v-container>
         <v-row>
-          <v-col>
-            <v-text-field
-              class="pokemonId"
-              label="Id"
-              v-model="inputId"
-            ></v-text-field>
-          </v-col>
           <v-col class="pokemonCrud">
             <v-text-field label="Name" v-model="inputName"></v-text-field>
           </v-col>
@@ -60,13 +53,10 @@
     </v-card-text>
     <v-card-actions>
       <v-spacer></v-spacer>
-      <v-btn class="buttonCrudUpdate" @click="onUpdate">
+      <v-btn class="buttonCrudUpdate" @click="onUpdate()">
         <div>Update</div>
       </v-btn>
-      <v-btn class="buttonCrudDelete" @click="onDelete">
-        <div>Delete</div>
-      </v-btn>
-      <v-btn class="buttonCrudCancel" @click="onCancel">
+      <v-btn class="buttonCrudCancel" @click="onCancel()">
         <div>Cancel</div>
       </v-btn>
     </v-card-actions>
@@ -74,27 +64,34 @@
 </template>
 
 <script>
+import pokemonGateway from "../gateways/pokemon.gateway";
+
+components: {
+  pokemonGateway;
+}
+
 export default {
   name: "PokemonModalCrud",
+  props: {
+    selectedPokemon: Object,
+  },
 
   data() {
     return {
-      inputId: null,
-      inputName: null,
-      inputExp: null,
-      inputWeight: null,
-      inputHeight: null,
-      inputAbility1: null,
-      inputAbility2: null,
-      inputType1: null,
-      inputType2: null,
+      inputName: this.selectedPokemon.name,
+      inputExp: this.selectedPokemon.base_experience,
+      inputWeight: this.selectedPokemon.weight,
+      inputHeight: this.selectedPokemon.height,
+      inputAbility1: "?",
+      inputAbility2: "?",
+      inputType1: "?",
+      inputType2: "?",
     };
   },
 
   methods: {
     onUpdate() {
       const data = {
-        id: this.inputId,
         name: this.inputName,
         base_experience: this.inputExp,
         height: this.inputHeight,
@@ -109,9 +106,6 @@ export default {
         ],
       };
       this.$emit("clickUpdatePersonal", data);
-    },
-    onDelete() {
-      this.$emit("clickDeletePersonal", this.inputId);
     },
     onCancel() {
       this.$emit("clickCancelUpdateButton");

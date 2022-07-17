@@ -63,22 +63,22 @@
 
 <script>
 export default {
-  name: "PokemonModalCrud",
-   props: {
+  name: "PokemonModalCreate",
+  props: {
     labelButton: String,
   },
 
-  data(){
-    return{
-        inputName: null,
-        inputExp: null,
-        inputWeight: null,
-        inputHeight: null,
-        inputAbility1: null,
-        inputAbility2: null,
-        inputType1: null,
-        inputType2: null
-    }
+  data() {
+    return {
+      inputName: null,
+      inputExp: null,
+      inputWeight: null,
+      inputHeight: null,
+      inputAbility1: null,
+      inputAbility2: null,
+      inputType1: null,
+      inputType2: null,
+    };
   },
 
   methods: {
@@ -89,17 +89,30 @@ export default {
         height: this.inputHeight,
         weight: this.inputWeight,
         abilities: [
-          { ability: { name: this.inputAbility1 } }, { ability: { name: this.inputAbility2 } },
+          { ability: { name: this.inputAbility1 } },
+          { ability: { name: this.inputAbility2 } },
         ],
         types: [
-          { type: { name: this.inputType1 } }, {type: { name: this.inputType2 } },
+          { type: { name: this.inputType1 } },
+          { type: { name: this.inputType2 } },
         ],
       };
       this.$emit("clickInsertPersonal", data);
-
+      this.clearText();
     },
     onCancel() {
       this.$emit("clickCancelButton");
+      this.clearText();
+    },
+    clearText() {
+      this.inputName = "";
+      this.inputExp = "";
+      this.inputWeight = "";
+      this.inputHeight = "";
+      this.inputAbility1 = "";
+      this.inputAbility2 = "";
+      this.inputType1 = "";
+      this.inputType2 = "";
     },
   },
 };

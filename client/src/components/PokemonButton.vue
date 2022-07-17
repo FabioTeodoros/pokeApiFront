@@ -1,7 +1,7 @@
 <template>
   <v-btn class="buttonMargin" @click="onClick">
-    <v-icon left> mdi-pencil </v-icon>
-    <div> {{labelButton}} </div>
+    <v-icon left> {{ icon }} </v-icon>
+    <div>{{ labelButton }}</div>
   </v-btn>
 </template>
 
@@ -10,6 +10,7 @@ export default {
   name: "PokemonButton",
   props: {
     labelButton: String,
+    icon: String,
   },
   methods: {
     onClick() {

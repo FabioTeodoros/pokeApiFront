@@ -9,15 +9,15 @@
 
 <script>
 export default {
-  prop: ['hidden'],
+  prop: ["hidden"],
   model: {
-      prop: 'hidden',
-      event: 'blur'
+    prop: "hidden",
+    event: "blur",
   },
   methods: {
-      handleInput (value) {
-          this.$emit('blur', value)
-      }
-  }
-}
+    handleInput(value) {
+      this.$emit("blur", value);
+    },
+  },
+};
 </script>

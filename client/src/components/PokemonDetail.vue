@@ -8,24 +8,42 @@
             <v-col>
               <template v-if="selectedPokemon.model == 'personal'">
                 <buttonUpdate
+                  class="buttonUpdate"
                   :labelButton="edit"
+                  :icon="icon"
                   @clickOnCreateButton="openModalUpdate"
                 />
+                <buttonUpdate
+                  class="buttonTrash"
+                  :labelButton="deleteButton"
+                  :icon="iconTrash"
+                  @clickOnCreateButton="showModalDelete"
+                />
+                <v-dialog
+                  v-model="showDialogDelete"
+                  persistent
+                  max-width="600px"
+                >
+                  <PokemonAlert
+                    @closeDelete="closeDelete"
+                    @deletePokemonPersonalApproved="deletePokemonPersonal"
+                    :namePokemon="selectedPokemon.name"
+                  />
+                </v-dialog>
+
                 <v-dialog
                   v-model="showDialogUpdate"
                   persistent
                   max-width="600px"
                 >
                   <PokemonModalUpdate
-                    @clickCancelUpdateButton="closeUpdate"
-                    @clickDeletePersonal="deleteUpdate"
-                    @clickUpdatePersonal="changeUpdate"
+                    @clickCancelUpdateButton="closeModalUpdate"
+                    @clickUpdatePersonal="changePokemonUpdate"
+                    :selectedPokemon="selectedPokemon"
                   />
                 </v-dialog>
               </template>
               <h1>{{ selectedPokemon.name }}</h1>
-              <v-divider></v-divider>
-              <span>Id {{ selectedPokemon.id }}</span>
               <v-divider></v-divider>
               <span
                 >Base Experience/Experiência
@@ -64,14 +82,15 @@
 </template>
 
 <script>
-import PokemonButton from "../components/PokemonButton.vue";
-import PokemonModalUpdate from "../components/PokemonModalUpdate.vue";
+import PokemonButton from "./PokemonButton.vue";
+import PokemonModalUpdate from "./PokemonModalUpdate.vue";
 import pokemonGateway from "../gateways/pokemon.gateway";
+import Pokedex from "../views/Pokedex.vue";
+import PokemonAlert from "./PokemonAlert.vue";
 
 export default {
   name: "PokemonDetail",
   props: {
-    inputId: String,
     selectedPokemon: Object,
     show: Boolean,
   },
@@ -79,12 +98,18 @@ export default {
     buttonUpdate: PokemonButton,
     modalUpdate: PokemonModalUpdate,
     PokemonModalUpdate,
+    Pokedex,
+    PokemonAlert,
   },
 
   data: () => {
     return {
       edit: "EDIT",
-      showDialogUpdate: false,  
+      deleteButton: "DELETE",
+      icon: "mdi-pencil",
+      iconTrash: "mdi-delete",
+      showDialogUpdate: false,
+      showDialogDelete: false,
     };
   },
 
@@ -92,19 +117,33 @@ export default {
     openModalUpdate() {
       this.showDialogUpdate = true;
     },
-    deleteUpdate(inputId) {
-      if (inputId != this.selectedPokemon.id) {
-        alert("Error, id does not exist");
-      }
-      else if(confirm("Do you really want to delete?")){
-        pokemonGateway.deletePokemon(inputId);
-      }
+    showModalDelete() {
+      this.showDialogDelete = true;
     },
-    changeUpdate() {
-
+    deletePokemonPersonal() {
+      pokemonGateway.deletePokemon(this.selectedPokemon.id);
+      this.$emit("reloadPage");
+      this.closeUpdate();
+    },
+    changePokemonUpdate(data) {
+      pokemonGateway
+        .updatePokemon(this.selectedPokemon.id, data)
+        .then(() => {
+          this.$emit("reloadPage");
+          this.closeUpdate();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    closeModalUpdate() {
+      this.showDialogUpdate = false;
     },
     closeUpdate() {
-      this.showDialogUpdate = false;
+      this.showDialog = false;
+    },
+    closeDelete() {
+      this.showDialogDelete = false;
     },
   },
 
@@ -157,6 +196,14 @@ export default {
   font-weight: bold;
   margin-left: 10px;
   margin-bottom: 5px;
+}
+.buttonTrash {
+  background: red !important;
+  color: #ffffff !important;
+  margin-left: 50px;
+}
+.buttonUpdate {
+  background: rgb(185, 218, 207) !important;
 }
 
 button[type-color="fire"] {

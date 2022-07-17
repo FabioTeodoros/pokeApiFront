@@ -5,14 +5,13 @@
         <img :src="pokemon.url_image" class="pokemonImageSizeCard" />
       </v-row>
       <h2 class="textCenter">{{ get_name(pokemon) }}</h2>
-
     </v-container>
   </v-card>
 </template>
 
 <script>
 export default {
-  name: "PokemonAllCard",
+  name: "PokemonCard",
   props: {
     pokemon: Object,
   },
@@ -25,7 +24,12 @@ export default {
 
   methods: {
     onCards() {
-      this.$emit("clickOnCards", this.pokemon.id, this.pokemon.model, this.pokemon.url_image);
+      this.$emit(
+        "clickOnCards",
+        this.pokemon.id,
+        this.pokemon.model,
+        this.pokemon.url_image
+      );
     },
     get_id(pokemon) {
       return String(pokemon.id);

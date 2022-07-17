@@ -11,9 +11,10 @@
         <PokemonButton
           @clickOnCreateButton="showCreate"
           :labelButton="create"
+          :icon="icon"
         />
         <v-dialog v-model="showDialogCrud" persistent max-width="600px">
-          <PokemonModalCrud
+          <PokemonModalCreate
             @clickCancelButton="closeCreate"
             @clickInsertPersonal="insertPersonal"
           />
@@ -25,7 +26,7 @@
             v-for="pokemon in filteredPokemons"
             :key="pokemon.name"
           >
-            <PokemonAllCard @clickOnCards="showPokemon" :pokemon="pokemon" />
+            <PokemonCard @clickOnCards="showPokemon" :pokemon="pokemon" />
           </v-col>
         </v-row>
       </v-container>
@@ -33,9 +34,9 @@
     <template>
       <PokemonDetail
         @closeDialog="showDialog = $event"
-        :pokemons="pokemons"
-        :selected-pokemon="selectedPokemon"
+        :selectedPokemon="selectedPokemon"
         :show="showDialog"
+        @reloadPage="reloadPokemons"
       />
     </template>
   </v-app>
@@ -46,9 +47,9 @@ import pokemonGateway from "../gateways/pokemon.gateway";
 import PokemonButton from "../components/PokemonButton.vue";
 import PokemonImgLogo from "../components/PokemonImgLogo.vue";
 import PokemonTextLogo from "../components/PokemonTextLogo.vue";
-import PokemonModalCrud from "../components/PokemonModalCrud.vue";
+import PokemonModalCreate from "../components/PokemonModalCreate.vue";
 import PokemonSearch from "../components/PokemonSearch.vue";
-import PokemonAllCard from "../components/PokemonAllCard.vue";
+import PokemonCard from "../components/PokemonCard.vue";
 import PokemonDetail from "../components/PokemonDetail.vue";
 
 export default {
@@ -58,9 +59,9 @@ export default {
     PokemonButton,
     PokemonImgLogo,
     PokemonTextLogo,
-    PokemonModalCrud,
+    PokemonModalCreate,
     PokemonSearch,
-    PokemonAllCard,
+    PokemonCard,
     PokemonDetail,
   },
 
@@ -72,6 +73,8 @@ export default {
       showDialogCrud: false,
       selectedPokemon: undefined,
       create: "CREATE",
+      icon: "mdi-pencil",
+      type: "all",
     };
   },
 
@@ -99,51 +102,18 @@ export default {
         .insertPokemon(data)
         .then(() => {
           console.log("Create Pokémon Successfully");
+          this.reloadPokemons();
+          this.showDialogCrud = false;
         })
         .catch((error) => {
           console.log(error);
-        });
-    },
-
-    deletePersonal(inputId) {
-      pokemonGateway.deletePokemon(inputId);
-    },
-
-    updatePersonal(
-      inputId,
-      inputName,
-      inputExp,
-      inputHeight,
-      inputWeight,
-      inputAbility1,
-      inputAbility2,
-      inputType1,
-      inputType2
-    ) {
-      const data = {
-        name: inputName,
-        base_experience: inputExp,
-        height: inputHeight,
-        weight: inputWeight,
-        abilities: [
-          { ability: { name: inputAbility1 } },
-          { ability: { name: inputAbility2 } },
-        ],
-        types: [{ type: { name: inputType1 }, type: { name: inputType2 } }],
-      };
-      pokemonGateway
-        .updatePokemon(inputId, data)
-        .then(() => {
-          console.log("Update Pokémon Successfully");
-        })
-        .catch((error) => {
-          console.log(error);
+          this.showDialogCrud = false;
         });
     },
     showCreate() {
       this.showDialogCrud = true;
     },
-    closeCreate() {
+    closeCreate(data) {
       this.showDialogCrud = false;
     },
     reloadPokemons() {
