@@ -82,10 +82,10 @@ export default {
       inputExp: this.selectedPokemon.base_experience,
       inputWeight: this.selectedPokemon.weight,
       inputHeight: this.selectedPokemon.height,
-      inputAbility1: "?",
-      inputAbility2: "?",
-      inputType1: "?",
-      inputType2: "?",
+      inputAbility1: this.selectedPokemon.abilities[0].ability.name,
+      inputAbility2: this.selectedPokemon.abilities[1].ability.name,
+      inputType1: this.selectedPokemon.types[0].type.name,
+      inputType2: this.selectedPokemon.types[1].type.name,
     };
   },
 

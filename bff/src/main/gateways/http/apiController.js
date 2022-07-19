@@ -1,61 +1,55 @@
-const https = require('https');
-const axios = require('axios');
-const { all } = require('express/lib/application');
+const { default: axios } = require("axios")
 
 const basePath = `http://127.0.0.1:8080/pokemon`;
 
-const api = {
+const apiController = {
   getDetail: async (req, res, model, id) => {
     const url = `${basePath}/${model}/${id}`;
-    const response = await axios.get(url)
-    .catch((error) => {
-      console.log(error)
-      res.status(500).send();
-    })
-    res.send(response.data);
+    try {
+      const response = await axios.get(url)
+      res.status(200).send(response.data)
+    } catch (error) {
+      res.status(404).send("This pokemon doesn't exist");
+    } 
   },
 
   insertPersonal: async (req, res) => {
     const url = `${basePath}/personal`;
     const response = await axios.post(url, req.body)
-    .catch((error) => {
-      console.log(error)
-      res.status(500).send();
-    })
-    res.status(201).send(response.data);
+      .catch(() => {
+        res.status(404).send("Error insert Pokemon");
+      })
+      res.status(201).send(response.data)
   },
 
   deletePersonal: async (req, res, id) => {
     const url = `${basePath}/personal/${id}`;
     const response = await axios.delete(url)
-    .catch((error) => {
-      console.log(error)
-      res.status(500).send();
-    })
-    res.send(response.data);
+      .catch(() => {
+        res.status(404).send("Error delete Pokemon");
+      })
+      res.status(200).send(response.data)
   },
 
- updatePersonal: async (req, res, id) => {
+  updatePersonal: async (req, res, id) => {
     const url = `${basePath}/personal/${id}`;
     const response = await axios.put(url, req.body)
-    .catch((error) => {
-      console.log(error)
-      res.status(500).send();
-    })
-    res.send(response.data);
+      .catch(() => {
+        res.status(404).send("Error update Pokemon");
+      })
+      res.status(200).send(response.data)
   },
 
   getPokemons: async (req, res, model) => {
     const url = `${basePath}/list?model=${model}`;
     const response = await axios.get(url)
-    .catch((error) => {
-      console.log(error)
-      res.status(500).send();
-    })
-    res.send(response.data);
+      .catch(() => {
+        res.status(404).send("Error get Pokemons");
+      })
+      res.status(200).send(response.data)
   }
 }
 
-module.exports = api;
+module.exports = apiController;
 
 

@@ -4,8 +4,8 @@ const api = "http://localhost:3000/pokemon/";
 const crud = "http://localhost:3000/"
 
 const pokemonGateway = {
-  async getPokemons() {
-    return await axios.get(api + "all");
+  async getPokemons(model) {
+    return await axios.get(api + model);
   },
   async getPokemon(model, id) {
     return await axios.get(api + model + "/" + id);

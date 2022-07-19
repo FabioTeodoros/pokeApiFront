@@ -13,6 +13,9 @@
           :labelButton="create"
           :icon="icon"
         />
+        <v-btn class="buttonTypePage" @click="typePage()">{{
+          selectModel
+        }}</v-btn>
         <v-dialog v-model="showDialogCrud" persistent max-width="600px">
           <PokemonModalCreate
             @clickCancelButton="closeCreate"
@@ -74,7 +77,8 @@ export default {
       selectedPokemon: undefined,
       create: "CREATE",
       icon: "mdi-pencil",
-      type: "all",
+      selectModel: "all",
+      count: 2,
     };
   },
 
@@ -116,9 +120,26 @@ export default {
     closeCreate(data) {
       this.showDialogCrud = false;
     },
+    typePage() {
+      switch (this.count) {
+        case 1:
+          this.selectModel = "all";
+          this.count = 2;
+          break;
+        case 2:
+          this.selectModel = "personal";
+          this.count = 3;
+          break;
+        case 3:
+          this.selectModel = "official";
+          this.count = 1;
+          break;
+      }
+      this.reloadPokemons();
+    },
     reloadPokemons() {
       pokemonGateway
-        .getPokemons()
+        .getPokemons(this.selectModel)
         .then((response) => {
           this.pokemons = response.data.results;
           console.log("Get all Pokémons Succes");
@@ -159,6 +180,13 @@ export default {
 
 .cardsBackground {
   width: 700px;
+}
+.buttonTypePage {
+  margin-left: 5px;
+  margin-bottom: 5px;
+  background-color: rgb(0, 0, 0) !important;
+  color: rgb(255, 255, 255) !important;
+  min-width: 115px !important;
 }
 </style>
 
