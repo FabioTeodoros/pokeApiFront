@@ -2,9 +2,17 @@ const { default: axios } = require('axios')
 const apiController = require('../../../main/gateways/http/apiController.js')
 
 jest.spyOn(axios, 'get')
+jest.spyOn(axios, 'post')
+jest.spyOn(axios, 'delete')
+jest.spyOn(axios, 'put')
+
+// jest.mock('axios', () => {
+//     post: jest.fn()
+//     get: jest.fn()
+// })
 
 describe('Given apiController', () => {
-    const basePath = "http://localhost:8080/pokemon/"
+    const basePath = "http://127.0.0.1:8080/pokemon/"
     const req = {}
     const res = {
         status: jest.fn().mockReturnValue({
@@ -22,16 +30,20 @@ describe('Given apiController', () => {
 
         describe('And is successful', () => {
             const pokemon = {
-                data: 'pokemon' 
+                data: 'pokemon'
             }
 
-            beforeEach(async() => {
-               await axios.get.mockResolvedValue(pokemon)
+            beforeEach(() => {
+                axios.get.mockResolvedValue(pokemon)
                 apiController.getDetail(req, res, model, id)
             })
 
             it('Then axios.get is called', () => {
-                expect(axios.get).toHaveBeenCalledWith(basePath + "/" + model + "/" + id)
+                expect(axios.get).toHaveBeenCalledWith(basePath + model + "/" + id)
+            })
+
+            it('Then axios.get is called times', () => {
+                expect(axios.get).toHaveBeenCalledTimes(1)
             })
 
             it('Then res.status is called', () => {
@@ -50,7 +62,7 @@ describe('Given apiController', () => {
             })
 
             it('Then axios.get throws an error', () => {
-                expect(axios.get).rejects.toThrow(Error)
+                axios.get.mockRejectedValue(new Error('error'));
             })
 
             it('Then res.status is called', () => {
@@ -61,93 +73,195 @@ describe('Given apiController', () => {
                 expect(res.status().send).toHaveBeenCalledWith("This pokemon doesn't exist")
             })
         })
+    })
 
-        // describe('When insertPersonal is called', () => {
-        //     const pokemon = {
-        //         data: "pokemon"
-        //     }
+    describe('When insertPersonal is called', () => {
+        const pokemon = {
+            data: "pokemon"
+        }
+        describe('And is successful', () => {
 
-        //     beforeEach(() => {
-        //         axios.post.mockResolvedValue(pokemon)
-        //         apiController.insertPersonal(req, res)
-        //     })
+            beforeEach(() => {
+                axios.post.mockResolvedValue(pokemon)
+                apiController.insertPersonal(req, res)
+            })
 
-        //     it('Then axios.get is called', () => {
-        //         expect(axios.post).toHaveBeenCalledWith(API + "/insert")
-        //     })
+            it('Then axios.post is called', () => {
+                expect(axios.post).toHaveBeenCalledTimes(1)
+            })
 
-        //     it('Then res.status is called', () => {
-        //         expect(res.status).toHaveBeenCalledWith(200)
-        //     })
+            it('Then axios.post is called', () => {
+                expect(axios.post).toHaveBeenCalledWith(basePath + 'personal', req.body)
+            })
 
-        //     it('Then res.status().send is called', () => {
-        //         expect(res.status().send).toHaveBeenCalledWith("pokemon")
-        //     })
-        // })
+            it('Then res.status is called', () => {
+                expect(res.status).toHaveBeenCalledWith(201)
+            })
 
-        // describe('And throws an error', () => {
-        //     beforeEach(() => {
-        //         axios.post.mockRejectedValue()
-        //         apiController.getDetail(req, res)
-        //     })
+            it('Then res.status().send is called', () => {
+                expect(res.status().send).toHaveBeenCalledWith("pokemon")
+            })
+        })
 
-        //     it('Then axios.get throws an error', () => {
-        //         expect(axios.post).rejects.toThrow(Error)
-        //     })
+        describe('And throws an error', () => {
 
-        //     it('Then res.status is called', () => {
-        //         expect(res.status).toHaveBeenCalledWith(404)
-        //     })
+            beforeEach(() => {
+                axios.post.mockRejectedValue(new Error('error'))
+                apiController.insertPersonal(req, res)
+            })
 
-        //     it('Then res.status().send is called', () => {
-        //         expect(res.status().send).toHaveBeenCalledWith("Error insert Pokemon")
-        //     })
-        // })
+            it('Then res.status is called', () => {
+                expect(res.status).toHaveBeenCalledWith(404)
+            })
 
-        // describe('When deletePersonal is called', () => {
-        //     const id = "idMock"
+            it('Then res.status().send is called', () => {
+                expect(res.status().send).toHaveBeenCalledWith("Error insert Pokemon")
+            })
+        })
+    })
 
-        //     describe('And is successful', () => {
-        //         const pokemon = {
-        //             data: "pokemonDetailMock"
-        //         }
+    describe('When deletePersonal is called', () => {
+        const id = "idMock"
 
-        //     beforeEach(() => {
-        //         axios.delete.mockResolvedValue(pokemon)
-        //         apiController.deletePersonal(req, res, id)
-        //     })
+        describe('And is successful', () => {
+            const pokemon = {
+                data: "pokemon"
+            }
 
-        //     it('Then axios.get is called', () => {
-        //         expect(axios.post).toHaveBeenCalledWith(API + "/insert")
-        //     })
+            beforeEach(() => {
+                axios.delete.mockResolvedValue(pokemon)
+                apiController.deletePersonal(req, res, id)
+            })
 
-        //     it('Then res.status is called', () => {
-        //         expect(res.status).toHaveBeenCalledWith(200)
-        //     })
+            it('Then axios.delete is called', () => {
+                expect(axios.delete).toHaveBeenCalledWith(basePath + "personal" + "/" + id)
+            })
 
-        //     it('Then res.status().send is called', () => {
-        //         expect(res.status().send).toHaveBeenCalledWith("pokemon")
-        //     })
-        // })
+            it('Then axios.delete is called times', () => {
+                expect(axios.delete).toHaveBeenCalledTimes(1)
+            })
 
-        // describe('And throws an error', () => {
-        //     beforeEach(() => {
-        //         axios.post.mockRejectedValue()
-        //         apiController.getDetail(req, res)
-        //     })
+            it('Then res.status is called', () => {
+                expect(res.status).toHaveBeenCalledWith(200)
+            })
 
-        //     it('Then axios.get throws an error', () => {
-        //         expect(axios.post).rejects.toThrow(Error)
-        //     })
+            it('Then res.status().send is called', () => {
+                expect(res.status().send).toHaveBeenCalledWith("pokemon")
+            })
+        })
 
-        //     it('Then res.status is called', () => {
-        //         expect(res.status).toHaveBeenCalledWith(404)
-        //     })
+        describe('And throws an error', () => {
+            beforeEach(() => {
+                axios.delete.mockRejectedValue()
+                apiController.deletePersonal(req, res)
+            })
 
-        //     it('Then res.status().send is called', () => {
-        //         expect(res.status().send).toHaveBeenCalledWith("Error insert Pokemon")
-        //     })
-        // })
+            it('Then axios.get throws an error', () => {
+                expect(axios.post).rejects.toThrow(Error)
+            })
 
+            it('Then res.status is called', () => {
+                expect(res.status).toHaveBeenCalledWith(404)
+            })
+
+            it('Then res.status().send is called', () => {
+                expect(res.status().send).toHaveBeenCalledWith("Error delete Pokemon")
+            })
+        })
+    })
+    describe('When updatePersonal is called', () => {
+        const id = "idMock"
+
+        describe('And is successful', () => {
+            const pokemon = {
+                data: "pokemon"
+            }
+
+            beforeEach(() => {
+                axios.put.mockResolvedValue(pokemon)
+                apiController.updatePersonal(req, res, id)
+            })
+
+            it('Then axios.post is called', () => {
+                expect(axios.put).toHaveBeenCalledTimes(1)
+            })
+
+            it('Then axios.post is called', () => {
+                expect(axios.put).toHaveBeenCalledWith(basePath + 'personal' + "/" + id, req.body)
+            })
+
+            it('Then res.status is called', () => {
+                expect(res.status).toHaveBeenCalledWith(200)
+            })
+
+            it('Then res.status().send is called', () => {
+                expect(res.status().send).toHaveBeenCalledWith("pokemon")
+            })
+        })
+
+        describe('And throws an error', () => {
+
+            beforeEach(() => {
+                axios.put.mockRejectedValue(new Error('error'))
+                apiController.updatePersonal(req, res, id)
+            })
+
+            it('Then res.status is called', () => {
+                expect(res.status).toHaveBeenCalledWith(404)
+            })
+
+            it('Then res.status().send is called', () => {
+                expect(res.status().send).toHaveBeenCalledWith("Error update Pokemon")
+            })
+        })
+    })
+    describe('When getPokemons is called', () => {
+        const model = "modelMock"
+
+        describe('And is successful', () => {
+            const pokemon = {
+                data: 'pokemon'
+            }
+
+            beforeEach(() => {
+                axios.get.mockResolvedValue(pokemon)
+                apiController.getPokemons(req, res, model)
+            })
+
+            it('Then axios.get is called', () => {
+                expect(axios.get).toHaveBeenCalledWith(basePath + 'list?model=' + model)
+            })
+
+            it('Then axios.get is called times', () => {
+                expect(axios.get).toHaveBeenCalledTimes(1)
+            })
+
+            it('Then res.status is called', () => {
+                expect(res.status).toHaveBeenCalledWith(200)
+            })
+
+            it('Then res.status().send is called', () => {
+                expect(res.status().send).toHaveBeenCalledWith('pokemon')
+            })
+        })
+
+        describe('And throws an error', () => {
+            beforeEach(() => {
+                axios.get.mockRejectedValue()
+                apiController.getPokemons(req, res, model)
+            })
+
+            it('Then axios.get throws an error', () => {
+                axios.get.mockRejectedValue(new Error('error'));
+            })
+
+            it('Then res.status is called', () => {
+                expect(res.status).toHaveBeenCalledWith(404)
+            })
+
+            it('Then res.status().send is called', () => {
+                expect(res.status().send).toHaveBeenCalledWith("Error get Pokemons")
+            })
+        })
     })
 })
