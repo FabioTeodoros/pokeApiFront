@@ -13,7 +13,9 @@
 export default {
   name: "PokemonCard",
   props: {
-    pokemon: Object,
+    pokemon: {
+      type: Object,
+    },
   },
 
   data: () => {

@@ -66,14 +66,16 @@
 <script>
 import pokemonGateway from "../gateways/pokemon.gateway";
 
-components: {
+{
   pokemonGateway;
 }
 
 export default {
   name: "PokemonModalCrud",
   props: {
-    selectedPokemon: Object,
+    selectedPokemon: {
+      Object,
+    },
   },
 
   data() {

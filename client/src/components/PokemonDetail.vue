@@ -44,16 +44,16 @@
                 </v-dialog>
               </template>
               <h1>{{ selectedPokemon.name }}</h1>
-              <v-divider></v-divider>
+              <!-- <v-divider></v-divider> -->
               <span
                 >Base Experience/Experiência
                 {{ selectedPokemon.base_experience }} XP</span
               >
-              <v-divider></v-divider>
+              <!-- <v-divider></v-divider> -->
               <span>Height/Altura {{ selectedPokemon.height }} m</span>
-              <v-divider></v-divider>
+              <!-- <v-divider></v-divider> -->
               <span>Weight/Peso {{ selectedPokemon.weight }} kg</span>
-              <v-divider></v-divider>
+              <!-- <v-divider></v-divider> -->
               <h3>Pokémon Types/Tipo</h3>
               <button
                 class="buttonAbility"
@@ -85,20 +85,21 @@
 import PokemonButton from "./PokemonButton.vue";
 import PokemonModalUpdate from "./PokemonModalUpdate.vue";
 import pokemonGateway from "../gateways/pokemon.gateway";
-import Pokedex from "../views/Pokedex.vue";
 import PokemonAlert from "./PokemonAlert.vue";
 
 export default {
   name: "PokemonDetail",
   props: {
-    selectedPokemon: Object,
-    show: Boolean,
+    selectedPokemon: {
+      type: Object,
+    },
+    show: {
+      type: Boolean,
+    },
   },
   components: {
     buttonUpdate: PokemonButton,
-    modalUpdate: PokemonModalUpdate,
     PokemonModalUpdate,
-    Pokedex,
     PokemonAlert,
   },
 
@@ -126,15 +127,10 @@ export default {
       this.closeUpdate();
     },
     changePokemonUpdate(data) {
-      pokemonGateway
-        .updatePokemon(this.selectedPokemon.id, data)
-        .then(() => {
-          this.$emit("reloadPage");
-          this.closeUpdate();
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      pokemonGateway.updatePokemon(this.selectedPokemon.id, data).then(() => {
+        this.$emit("reloadPage");
+        this.closeUpdate();
+      });
     },
     closeModalUpdate() {
       this.showDialogUpdate = false;
@@ -157,6 +153,7 @@ export default {
       },
     },
   },
+  
 };
 </script>
 

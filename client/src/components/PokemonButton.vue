@@ -1,5 +1,5 @@
 <template>
-  <v-btn class="buttonMargin" @click="onClick">
+  <v-btn class="buttonMargin" @click="onClick" data-test-createButton>
     <v-icon left> {{ icon }} </v-icon>
     <div>{{ labelButton }}</div>
   </v-btn>
@@ -9,8 +9,12 @@
 export default {
   name: "PokemonButton",
   props: {
-    labelButton: String,
-    icon: String,
+    labelButton: {
+      type: String,
+    },
+    icon: {
+      type: String,
+    },
   },
   methods: {
     onClick() {

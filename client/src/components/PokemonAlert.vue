@@ -15,7 +15,7 @@
     </v-card-text>
     <v-card-actions>
       <v-spacer></v-spacer>
-      <v-btn class="buttonYes" @click="onDelete()">
+      <v-btn class="buttonYes" @click="onDelete()" data-test-deletePokemon>
         <div>Yes</div>
       </v-btn>
       <v-btn class="buttonNo" @click="onCancel()">
@@ -30,7 +30,9 @@ export default {
   name: "PokemonAlert",
 
   props: {
-    namePokemon: String,
+    namePokemon: {
+      type: String,
+    },
   },
 
   methods: {

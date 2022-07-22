@@ -117,7 +117,7 @@ export default {
     showCreate() {
       this.showDialogCrud = true;
     },
-    closeCreate(data) {
+    closeCreate() {
       this.showDialogCrud = false;
     },
     typePage() {

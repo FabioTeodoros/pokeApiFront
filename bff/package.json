@@ -8,7 +8,7 @@
     "node": ">=16.14.2"
   },
   "scripts": {
-    "test": "node_modules/.bin/jest --config jest.config.js --detectOpenHandles",
+    "test": "node_modules/.bin/jest --config jest.config.js --detectOpenHandles --coverage" ,
     "start": "nodemon ./application.js"
   },
   "author": "",

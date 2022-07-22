@@ -65,7 +65,9 @@
 export default {
   name: "PokemonModalCreate",
   props: {
-    labelButton: String,
+    labelButton: {
+     type: String,
+    },
   },
 
   data() {
